@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jocla Systems — Automate Your Business</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1E3A5F',
+            teal: '#14B8A6',
+            'teal-dark': '#0F9688',
+            'light-gray': '#F5F7FA',
+            'mid-gray': '#E8ECF0',
+          },
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    * { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: #F5F7FA; color: #1E3A5F; }
+    .font-display { font-family: 'Syne', sans-serif; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.7; }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .animate-fade-up { animation: fadeUp 0.7s ease forwards; }
+    .animate-fade-in { animation: fadeIn 0.7s ease forwards; }
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-500 { animation-delay: 0.5s; }
+    .delay-600 { animation-delay: 0.6s; }
+
+    .hidden-anim { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .visible-anim { opacity: 1; transform: translateY(0); }
+
+    .hero-bg {
+      background: linear-gradient(135deg, #1E3A5F 0%, #162d4a 60%, #0d2035 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -40%; right: -20%;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(20,184,166,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: -20%; left: -10%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(20,184,166,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(30,58,95,0.13); }
+
+    .btn-primary {
+      background: #14B8A6; color: white; font-weight: 600;
+      border-radius: 8px; padding: 14px 30px;
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: #0F9688; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(20,184,166,0.35); }
+
+    .btn-secondary {
+      background: transparent; color: white; font-weight: 600;
+      border-radius: 8px; padding: 13px 28px;
+      border: 2px solid rgba(255,255,255,0.35);
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+      display: inline-block;
+    }
+    .btn-secondary:hover { border-color: #14B8A6; background: rgba(20,184,166,0.12); transform: translateY(-2px); }
+
+    .btn-navy {
+      background: #1E3A5F; color: white; font-weight: 600;
+      border-radius: 8px; padding: 14px 30px;
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      display: inline-block;
+    }
+    .btn-navy:hover { background: #162d4a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(30,58,95,0.25); }
+
+    .nav-link { position: relative; color: rgba(255,255,255,0.8); font-weight: 500; transition: color 0.2s; }
+    .nav-link::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 2px; background: #14B8A6; transition: width 0.2s; }
+    .nav-link:hover { color: white; }
+    .nav-link:hover::after { width: 100%; }
+
+    .teal-badge {
+      background: rgba(20,184,166,0.12); color: #14B8A6;
+      border: 1px solid rgba(20,184,166,0.25); border-radius: 100px;
+      padding: 5px 16px; font-size: 13px; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      display: inline-block; margin-bottom: 16px;
+    }
+
+    .stars { color: #14B8A6; letter-spacing: 2px; }
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #14B8A6;
+      display: inline-block; animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    .form-input {
+      width: 100%; padding: 13px 16px;
+      border: 1.5px solid #E8ECF0; border-radius: 8px;
+      background: white; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; color: #1E3A5F;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+    .form-input:focus { border-color: #14B8A6; box-shadow: 0 0 0 3px rgba(20,184,166,0.12); }
+    .form-input::placeholder { color: #9BACCB; }
+
+    .spinner {
+      width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white; border-radius: 50%;
+      animation: spin 0.7s linear infinite; display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ======== STICKY HEADER ======== -->
+<header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="background:rgba(30,58,95,0.0);">
+  <div class="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+    <a href="#" class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#14B8A6;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M9 3v12M5 5l8 8M13 5l-8 8" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <span class="font-display font-700 text-white text-lg">Jocla <span style="color:#14B8A6;">Systems</span></span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8">
+      <a href="#problems" class="nav-link text-sm">Problems</a>
+      <a href="#services" class="nav-link text-sm">Services</a>
+      <a href="#examples" class="nav-link text-sm">Examples</a>
+      <a href="#how-it-works" class="nav-link text-sm">How It Works</a>
+      <a href="#contact" class="btn-primary text-sm" style="padding:10px 20px;">Get Free Audit</a>
+    </nav>
+
+    <button id="menu-btn" class="md:hidden text-white" aria-label="Toggle menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="md:hidden px-6 pb-6" style="background:rgba(30,58,95,0.97);backdrop-filter:blur(12px);">
+    <nav class="flex flex-col gap-4 pt-2">
+      <a href="#problems" class="nav-link text-sm">Problems</a>
+      <a href="#services" class="nav-link text-sm">Services</a>
+      <a href="#examples" class="nav-link text-sm">Examples</a>
+      <a href="#how-it-works" class="nav-link text-sm">How It Works</a>
+      <a href="#contact" class="btn-primary text-sm text-center" style="padding:12px 20px;">Get Free Audit</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ======== HERO ======== -->
+<section class="hero-bg min-h-screen flex flex-col justify-center pt-16">
+  <div class="max-w-6xl mx-auto px-6 py-24 md:py-32">
+    <div class="max-w-3xl">
+      <div class="teal-badge animate-fade-up">AI Automation for Local Businesses</div>
+      <h1 class="font-display text-4xl md:text-6xl font-800 text-white mb-6 animate-fade-up delay-100" style="line-height:1.1;">
+        Automate Your Business.<br/>
+        <span style="color:#14B8A6;">Save Hours</span> Every Week.
+      </h1>
+      <p class="text-lg md:text-xl text-blue-100 mb-10 max-w-2xl animate-fade-up delay-200" style="line-height:1.7;opacity:0.85;">
+        Jocla Systems builds custom automations for medical offices, schools, and local businesses — so you can stop doing repetitive work and start focusing on what actually matters.
+      </p>
+      <div class="flex flex-wrap gap-4 animate-fade-up delay-300">
+        <a href="#contact" class="btn-primary font-display text-base">Get Free Audit →</a>
+        <a href="#how-it-works" class="btn-secondary font-display text-base">See How It Works</a>
+      </div>
+      <div class="flex flex-wrap gap-6 mt-14 animate-fade-up delay-400">
+        <div class="flex items-center gap-2"><span class="dot"></span><span class="text-blue-100 text-sm" style="opacity:0.7;">7-day setup</span></div>
+        <div class="flex items-center gap-2"><span class="dot" style="animation-delay:0.4s;"></span><span class="text-blue-100 text-sm" style="opacity:0.7;">No technical skills needed</span></div>
+        <div class="flex items-center gap-2"><span class="dot" style="animation-delay:0.8s;"></span><span class="text-blue-100 text-sm" style="opacity:0.7;">Free consultation</span></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:block;width:100%;overflow:hidden;line-height:0;">
+    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:60px;">
+      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#F5F7FA"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ======== PROBLEMS ======== -->
+<section id="problems" class="py-24 bg-light-gray">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14 hidden-anim">
+      <div class="teal-badge">Sound Familiar?</div>
+      <h2 class="font-display text-3xl md:text-4xl font-700 text-navy mb-4">Your team is drowning in manual work.</h2>
+      <p class="text-gray-500 max-w-xl mx-auto text-lg">Every hour your staff spends on repetitive tasks is an hour not spent on your patients, students, or customers.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white rounded-2xl p-7 shadow-sm card-hover hidden-anim">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background:rgba(20,184,166,0.1);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </div>
+        <h3 class="font-display font-700 text-navy text-lg mb-2">Email Overload</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Hundreds of emails a week. Manually routing, responding, and following up takes hours you don't have.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-7 shadow-sm card-hover hidden-anim delay-100">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background:rgba(20,184,166,0.1);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+        </div>
+        <h3 class="font-display font-700 text-navy text-lg mb-2">Manual Data Entry</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Copy-pasting from forms into spreadsheets, EHRs, or databases. Slow, tedious, and error-prone.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-7 shadow-sm card-hover hidden-anim delay-200">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background:rgba(20,184,166,0.1);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3 class="font-display font-700 text-navy text-lg mb-2">Repetitive Reports</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Building the same weekly or monthly reports by hand, pulling data from multiple places every single time.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-7 shadow-sm card-hover hidden-anim delay-300">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background:rgba(20,184,166,0.1);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <h3 class="font-display font-700 text-navy text-lg mb-2">Missed Follow-Ups</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Patients, leads, or clients fall through the cracks because follow-ups depend on someone remembering to send them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== SOLUTION ======== -->
+<section id="solution" class="py-24 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div class="hidden-anim">
+        <div class="teal-badge">The Jocla Way</div>
+        <h2 class="font-display text-3xl md:text-4xl font-700 text-navy mb-6 leading-tight">We automate the work.<br/>You run your business.</h2>
+        <p class="text-gray-500 text-lg mb-6 leading-relaxed">Jocla Systems designs and builds smart automations that connect the tools you already use — no coding required on your end. We do the heavy lifting so your team can focus on the work that actually requires a human.</p>
+        <p class="text-gray-500 text-lg mb-8 leading-relaxed">Whether you run a medical clinic, a school, or a local service business — if you have repetitive workflows, we can automate them in 7 days or less.</p>
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:#14B8A6;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="text-navy">Save 5–20 hours of staff time every week</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:#14B8A6;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="text-navy">Reduce errors from manual work</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:#14B8A6;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="text-navy">Works with tools you already use</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:#14B8A6;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="text-navy">No technical skills needed from your team</span>
+          </div>
+        </div>
+      </div>
+      <div class="hidden-anim delay-200">
+        <div class="rounded-2xl p-8 relative" style="background:linear-gradient(135deg,#1E3A5F 0%,#0d2035 100%);">
+          <div class="text-center mb-6"><span class="text-white text-sm font-600 opacity-60 uppercase tracking-widest">Before vs After</span></div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white/10 rounded-xl p-4">
+              <p class="text-red-300 text-xs font-600 uppercase tracking-wide mb-3">Before</p>
+              <div class="flex flex-col gap-2">
+                <div class="bg-white/10 rounded-lg p-2 text-white/60 text-xs">📧 Check email manually</div>
+                <div class="bg-white/10 rounded-lg p-2 text-white/60 text-xs">📋 Copy-paste to sheet</div>
+                <div class="bg-white/10 rounded-lg p-2 text-white/60 text-xs">📞 Remember to follow up</div>
+                <div class="bg-white/10 rounded-lg p-2 text-white/60 text-xs">📊 Build report from scratch</div>
+              </div>
+            </div>
+            <div class="rounded-xl p-4" style="background:rgba(20,184,166,0.15);border:1px solid rgba(20,184,166,0.3);">
+              <p class="text-xs font-600 uppercase tracking-wide mb-3" style="color:#14B8A6;">After</p>
+              <div class="flex flex-col gap-2">
+                <div class="rounded-lg p-2 text-white text-xs" style="background:rgba(20,184,166,0.2);">⚡ Auto-sorted & answered</div>
+                <div class="rounded-lg p-2 text-white text-xs" style="background:rgba(20,184,166,0.2);">⚡ Auto-synced instantly</div>
+                <div class="rounded-lg p-2 text-white text-xs" style="background:rgba(20,184,166,0.2);">⚡ Sent automatically</div>
+                <div class="rounded-lg p-2 text-white text-xs" style="background:rgba(20,184,166,0.2);">⚡ Generated & emailed</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 text-center"><span class="text-white/50 text-xs">Your team gets hours back — every week.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== SERVICES ======== -->
+<section id="services" class="py-24 bg-light-gray">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14 hidden-anim">
+      <div class="teal-badge">Our Core Offer</div>
+      <h2 class="font-display text-3xl md:text-4xl font-700 text-navy mb-4">7-Day Automation Setup</h2>
+      <p class="text-gray-500 max-w-xl mx-auto text-lg">From discovery to live automation — we handle everything in one week so you can see results fast.</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      <div class="lg:col-span-2 bg-navy rounded-2xl p-10 shadow-lg hidden-anim">
+        <h3 class="font-display font-700 text-white text-2xl mb-2">Everything Included</h3>
+        <p class="text-blue-200 mb-8 opacity-70">One clear, complete service — no hidden extras.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex items-start gap-3 bg-white/5 rounded-xl p-4">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background:rgba(20,184,166,0.2);"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><p class="text-white font-600 text-sm">Process Audit</p><p class="text-blue-200 text-xs mt-1 opacity-60">We map your current workflow and identify every automation opportunity.</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-white/5 rounded-xl p-4">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background:rgba(20,184,166,0.2);"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><p class="text-white font-600 text-sm">Custom Build</p><p class="text-blue-200 text-xs mt-1 opacity-60">We build your automation using the tools you already have.</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-white/5 rounded-xl p-4">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background:rgba(20,184,166,0.2);"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><p class="text-white font-600 text-sm">Testing & QA</p><p class="text-blue-200 text-xs mt-1 opacity-60">Everything is tested thoroughly before it goes live.</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-white/5 rounded-xl p-4">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background:rgba(20,184,166,0.2);"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><p class="text-white font-600 text-sm">Team Training</p><p class="text-blue-200 text-xs mt-1 opacity-60">We walk your team through exactly how it works.</p></div>
+          </div>
+          <div class="flex items-start gap-3 bg-white/5 rounded-xl p-4 sm:col-span-2">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background:rgba(20,184,166,0.2);"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><p class="text-white font-600 text-sm">Ongoing Support</p><p class="text-blue-200 text-xs mt-1 opacity-60">We're available if anything needs adjusting after go-live.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-mid-gray card-hover hidden-anim delay-200 flex flex-col justify-between">
+        <div>
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(20,184,166,0.1);">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="10"/><polyline points="14,9 14,14 17,17"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-navy text-xl mb-3">Start this week.</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">Most automations are live within 7 days of your first call. No long contracts, no waiting months.</p>
+          <ul class="flex flex-col gap-2 mb-8">
+            <li class="text-sm text-gray-500 flex items-center gap-2"><span style="color:#14B8A6;">✓</span> Free initial audit</li>
+            <li class="text-sm text-gray-500 flex items-center gap-2"><span style="color:#14B8A6;">✓</span> No long-term commitment</li>
+            <li class="text-sm text-gray-500 flex items-center gap-2"><span style="color:#14B8A6;">✓</span> Results in 7 days</li>
+          </ul>
+        </div>
+        <a href="#contact" class="btn-primary text-center text-sm w-full">Book Free Audit →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== EXAMPLES ======== -->
+<section id="examples" class="py-24 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14 hidden-anim">
+      <div class="teal-badge">Real Automations</div>
+      <h2 class="font-display text-3xl md:text-4xl font-700 text-navy mb-4">What we actually build</h2>
+      <p class="text-gray-500 max-w-xl mx-auto text-lg">These aren't hypothetical — these are automations we've built for businesses like yours.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="rounded-2xl p-6 card-hover hidden-anim border border-mid-gray" style="background:#F5F7FA;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#14B8A6;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="m2 5 8 6 8-6"/></svg></div>
+        <h3 class="font-display font-700 text-navy text-base mb-2">Email Automation</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Auto-reply to common questions, route emails to the right team member, and send follow-up sequences — hands-free.</p>
+      </div>
+      <div class="rounded-2xl p-6 card-hover hidden-anim delay-100 border border-mid-gray" style="background:#F5F7FA;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#14B8A6;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="2" width="14" height="16" rx="2"/><path d="M7 6h6M7 10h6M7 14h4"/></svg></div>
+        <h3 class="font-display font-700 text-navy text-base mb-2">Form → Workflow</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Patient intake forms, enrollment requests, or lead captures instantly create tasks, send notifications, and update your records.</p>
+      </div>
+      <div class="rounded-2xl p-6 card-hover hidden-anim delay-200 border border-mid-gray" style="background:#F5F7FA;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#14B8A6;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M4 15l4-4 3 3 5-6"/><rect x="2" y="2" width="16" height="16" rx="2"/></svg></div>
+        <h3 class="font-display font-700 text-navy text-base mb-2">Auto Reports</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Weekly or monthly reports pulled from your data and emailed to whoever needs them — automatically, on schedule.</p>
+      </div>
+      <div class="rounded-2xl p-6 card-hover hidden-anim delay-300 border border-mid-gray" style="background:#F5F7FA;">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#14B8A6;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M10 2a6 6 0 0 1 6 6c0 5-3 7-3 7H7s-3-2-3-7a6 6 0 0 1 6-6z"/><path d="M8.5 17a1.5 1.5 0 0 0 3 0"/></svg></div>
+        <h3 class="font-display font-700 text-navy text-base mb-2">Appointment Reminders</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Automated SMS or email reminders before appointments — reducing no-shows without any manual effort.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== HOW IT WORKS ======== -->
+<section id="how-it-works" class="py-24 bg-light-gray">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-16 hidden-anim">
+      <div class="teal-badge">Simple Process</div>
+      <h2 class="font-display text-3xl md:text-4xl font-700 text-navy mb-4">How It Works</h2>
+      <p class="text-gray-500 max-w-lg mx-auto text-lg">Three straightforward steps. No jargon, no surprises.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+      <div class="bg-white rounded-2xl p-8 shadow-sm text-center card-hover hidden-anim relative z-10">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5 font-display font-800 text-xl text-white" style="background:linear-gradient(135deg,#1E3A5F,#14B8A6);">1</div>
+        <h3 class="font-display font-700 text-navy text-xl mb-3">Free Audit</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">We meet with you (virtually or in person) to understand your biggest time drains and map out the best automation opportunities.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-8 shadow-sm text-center card-hover hidden-anim delay-200 relative z-10">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5 font-display font-800 text-xl text-white" style="background:linear-gradient(135deg,#1E3A5F,#14B8A6);">2</div>
+        <h3 class="font-display font-700 text-navy text-xl mb-3">We Build It</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Our team designs, builds, and tests your custom automation — usually within 5–7 business days. No work required from your side.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-8 shadow-sm text-center card-hover hidden-anim delay-400 relative z-10">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5 font-display font-800 text-xl text-white" style="background:linear-gradient(135deg,#1E3A5F,#14B8A6);">3</div>
+        <h3 class="font-display font-700 text-navy text-xl mb-3">You Save Time</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Go live, watch the automation run, and get hours of your week back. We train your team and stay available for support.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== TESTIMONIALS ======== -->
+<section id="testimonials" class="py-24 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14 hidden-anim">
+      <div class="teal-badge">What Clients Say</div>
+      <h2 class="font-display text-3xl md:text-4xl font-700 text-navy">Real results from real businesses.</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-light-gray rounded-2xl p-8 card-hover hidden-anim">
+        <p class="stars text-lg mb-4">★★★★★</p>
+        <p class="text-gray-600 text-sm leading-relaxed mb-6">"We used to spend 3 hours every Monday pulling together our weekly report. Now it arrives in my inbox automatically every Friday night. I genuinely can't believe it took us this long to automate it."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-700 text-white text-sm" style="background:#1E3A5F;">MM</div>
+          <div><p class="font-600 text-navy text-sm">Maria M.</p><p class="text-gray-400 text-xs">Office Manager, Family Medical Clinic</p></div>
+        </div>
+      </div>
+      <div class="bg-light-gray rounded-2xl p-8 card-hover hidden-anim delay-200">
+        <p class="stars text-lg mb-4">★★★★★</p>
+        <p class="text-gray-600 text-sm leading-relaxed mb-6">"Our no-show rate dropped by almost 40% after the appointment reminder system went live. The automation pays for itself every week. Jocla had it running in under a week."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-700 text-white text-sm" style="background:#1E3A5F;">JR</div>
+          <div><p class="font-600 text-navy text-sm">James R.</p><p class="text-gray-400 text-xs">Administrator, Riverside Dental</p></div>
+        </div>
+      </div>
+      <div class="bg-light-gray rounded-2xl p-8 card-hover hidden-anim delay-400">
+        <p class="stars text-lg mb-4">★★★★★</p>
+        <p class="text-gray-600 text-sm leading-relaxed mb-6">"Our enrollment process was a nightmare — emails everywhere, data entry errors, missed steps. Jocla built an intake automation that handles everything the moment a form is submitted. Night and day difference."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center font-700 text-white text-sm" style="background:#1E3A5F;">LT</div>
+          <div><p class="font-600 text-navy text-sm">Linda T.</p><p class="text-gray-400 text-xs">Principal, Lakewood Charter Academy</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== CTA SECTION ======== -->
+<section id="cta" class="py-24" style="background:linear-gradient(135deg,#1E3A5F 0%,#0d2035 100%);">
+  <div class="max-w-3xl mx-auto px-6 text-center hidden-anim">
+    <h2 class="font-display text-3xl md:text-5xl font-800 text-white mb-5 leading-tight">Stop wasting time<br/>on manual work.</h2>
+    <p class="text-blue-100 text-lg mb-10 opacity-75 max-w-xl mx-auto">Book a free audit call. We'll identify your biggest time-wasters and show you exactly what we can automate — no commitment, no pressure.</p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="#contact" class="btn-primary font-display text-base">Book Free Audit →</a>
+      <a href="#how-it-works" class="btn-secondary font-display text-base">See How It Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- ======== CONTACT ======== -->
+<section id="contact" class="py-24 bg-white">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div class="hidden-anim">
+        <div class="teal-badge">Get In Touch</div>
+        <h2 class="font-display text-3xl md:text-4xl font-700 text-navy mb-4">Request your free audit</h2>
+        <p class="text-gray-500 text-lg mb-8 leading-relaxed">Tell us a little about your business. We'll reach out within one business day to schedule your free process audit.</p>
+        <div class="flex flex-col gap-5">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(20,184,166,0.1);">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#14B8A6" stroke-width="1.8" stroke-linecap="round"><rect x="1" y="3" width="16" height="12" rx="2"/><path d="m1 5 8 5.5L17 5"/></svg>
+            </div>
+            <a href="mailto:joclasystems@gmail.com" class="text-navy text-sm hover:underline" style="text-decoration-color:#14B8A6;">joclasystems@gmail.com</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(20,184,166,0.1);">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#14B8A6" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="7"/><polyline points="9,5 9,9 11.5,11.5"/></svg>
+            </div>
+            <span class="text-navy text-sm">Response within 1 business day</span>
+          </div>
+        </div>
+
+      
+      </div>
+
+      <!-- Form -->
+      <div class="bg-light-gray rounded-2xl p-8 shadow-sm hidden-anim delay-200">
+        <!--
+          FORMSPREE SETUP:
+          1. Sign up free at https://formspree.io
+          2. Create a new form with your email: joclasystems@gmail.com
+          3. Replace YOUR_FORM_ID below with the ID Formspree gives you (e.g. xpwzabcd)
+          4. The form will then email you every submission automatically
+        -->
+        <form
+          id="contact-form"
+          action="https://formspree.io/f/mbdakkrj"
+          method="POST"
+          class="flex flex-col gap-5"
+        >
+          <!-- Hidden field to set reply-to and subject -->
+          <input type="hidden" name="_subject" value="New Audit Request — Jocla Systems" />
+          <input type="hidden" name="_replyto" id="replyto-field" value="" />
+
+          <div>
+            <label class="block text-navy font-600 text-sm mb-2">Your Name</label>
+            <input type="text" name="name" class="form-input" placeholder="Jane Smith" required />
+          </div>
+          <div>
+            <label class="block text-navy font-600 text-sm mb-2">Email Address</label>
+            <input type="email" name="email" id="email-field" class="form-input" placeholder="jane@yourcompany.com" required />
+          </div>
+          <div>
+            <label class="block text-navy font-600 text-sm mb-2">Business Type</label>
+            <select name="business_type" class="form-input" style="cursor:pointer;">
+              <option value="" disabled selected>Select your business type</option>
+              <option>Medical Office / Clinic</option>
+              <option>School / Educational Institution</option>
+              <option>Local Service Business</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-navy font-600 text-sm mb-2">What takes up most of your team's time?</label>
+            <textarea name="message" class="form-input" rows="4" placeholder="Tell us about your biggest repetitive tasks or pain points..." required style="resize:vertical;"></textarea>
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn-primary text-center font-display flex items-center justify-center gap-2">
+            <span id="btn-text">Request Audit →</span>
+            <span id="btn-spinner" class="hidden"><span class="spinner"></span></span>
+          </button>
+        </form>
+
+        <!-- Success state -->
+        <div id="form-success" class="hidden text-center py-8">
+          <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(20,184,166,0.15);">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 16l8 8 14-14" stroke="#14B8A6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-navy text-xl mb-2">Message Sent!</h3>
+          <p class="text-gray-500 text-sm">Thanks! We'll be in touch within one business day at <strong>joclasystems@gmail.com</strong>.</p>
+        </div>
+
+        <!-- Error state -->
+        <div id="form-error" class="hidden mt-4 rounded-xl p-4" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);">
+          <p class="text-red-600 text-sm text-center">Something went wrong. Please email us directly at <a href="mailto:joclasystems@gmail.com" class="underline font-600">joclasystems@gmail.com</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== FOOTER ======== -->
+<footer class="bg-navy py-14">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#14B8A6;">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M9 3v12M5 5l8 8M13 5l-8 8" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="font-display font-700 text-white text-lg">Jocla <span style="color:#14B8A6;">Systems</span></span>
+        </div>
+        <p class="text-blue-200 text-sm opacity-60 max-w-xs">Automating your work. Simplifying your business.</p>
+        <a href="mailto:joclasystems@gmail.com" class="text-sm mt-2 inline-block" style="color:#14B8A6;opacity:0.8;">joclasystems@gmail.com</a>
+      </div>
+      <nav class="flex flex-wrap gap-6">
+        <a href="#problems" class="text-blue-200 text-sm opacity-60 hover:opacity-100 hover:text-white transition-all">Problems</a>
+        <a href="#services" class="text-blue-200 text-sm opacity-60 hover:opacity-100 hover:text-white transition-all">Services</a>
+        <a href="#examples" class="text-blue-200 text-sm opacity-60 hover:opacity-100 hover:text-white transition-all">Examples</a>
+        <a href="#how-it-works" class="text-blue-200 text-sm opacity-60 hover:opacity-100 hover:text-white transition-all">How It Works</a>
+        <a href="#contact" class="text-blue-200 text-sm opacity-60 hover:opacity-100 hover:text-white transition-all">Contact</a>
+      </nav>
+    </div>
+    <div class="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-blue-200 text-xs opacity-40">© 2025 Jocla Systems. All rights reserved.</p>
+      <p class="text-blue-200 text-xs opacity-40">Serving medical offices, schools, and local businesses.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Sticky header
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 30) {
+      header.style.background = 'rgba(30,58,95,0.97)';
+      header.style.backdropFilter = 'blur(12px)';
+      header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.2)';
+    } else {
+      header.style.background = 'rgba(30,58,95,0.0)';
+      header.style.backdropFilter = 'blur(0px)';
+      header.style.boxShadow = 'none';
+    }
+  });
+
+  // Mobile menu
+  document.getElementById('menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  });
+  document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open'));
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible-anim');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.hidden-anim').forEach(el => observer.observe(el));
+
+  // Mirror email into _replyto field on input
+  const emailField = document.getElementById('email-field');
+  const replyToField = document.getElementById('replyto-field');
+  if (emailField) {
+    emailField.addEventListener('input', () => {
+      replyToField.value = emailField.value;
+    });
+  }
+
+  // Form submission via fetch (AJAX) to Formspree
+  const form = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const btnText = document.getElementById('btn-text');
+  const btnSpinner = document.getElementById('btn-spinner');
+  const successMsg = document.getElementById('form-success');
+  const errorMsg = document.getElementById('form-error');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Show loading state
+      btnText.textContent = 'Sending...';
+      btnSpinner.classList.remove('hidden');
+      submitBtn.disabled = true;
+      errorMsg.classList.add('hidden');
+
+      // If user hasn't replaced YOUR_FORM_ID yet, show demo success
+      if (form.action.includes('YOUR_FORM_ID')) {
+        await new Promise(r => setTimeout(r, 1000));
+        form.classList.add('hidden');
+        successMsg.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const data = new FormData(form);
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          form.classList.add('hidden');
+          successMsg.classList.remove('hidden');
+        } else {
+          throw new Error('Form error');
+        }
+      } catch (err) {
+        btnText.textContent = 'Request Audit →';
+        btnSpinner.classList.add('hidden');
+        submitBtn.disabled = false;
+        errorMsg.classList.remove('hidden');
+      }
+    });
+  }
+</script>
+</body>
+</html>
